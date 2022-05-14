@@ -1,4 +1,5 @@
 import 'package:bloc_state/cubits/counter/counter_cubit.dart';
+import 'package:bloc_state/other_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -38,7 +39,35 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocBuilder<CounterCubit, CounterState>(
+      /*
+
+      * bloc Consumer help to create bloc listener and builder at the same time 
+      * without block listener if we go one page to another there will be a error
+      * to prevent those error we have to wrap our widget in to a block listener 
+      
+      
+      
+      */
+      body: BlocConsumer<CounterCubit, CounterState>(
+        listener: (context, state) {
+          // TODO: implement listener
+          if (state.counter == 3) {
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    content: Text('counter is ${state.counter}'),
+                  );
+                });
+          } else if (state.counter == -1) {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return OtherPage();
+            }));
+          }
+        },
+        //this part is for bloc listener
+        //if we don't use the bloc listener there will be n error
+
         builder: (context, state) {
           return Center(
             child: Text(
