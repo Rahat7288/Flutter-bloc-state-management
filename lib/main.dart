@@ -1,4 +1,4 @@
-import 'package:bloc_state/cubits/counter/counter_cubit.dart';
+import 'package:bloc_state/blocs/counter/counter_bloc.dart';
 import 'package:bloc_state/other_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,8 +13,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<CounterCubit>(
-      create: (context) => CounterCubit(),
+    return BlocProvider<CounterBloc>(
+      create: (context) => CounterBloc(),
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
@@ -48,9 +48,10 @@ class _MyHomePageState extends State<MyHomePage> {
       
       
       */
-      body: BlocConsumer<CounterCubit, CounterState>(
+      body: BlocListener<CounterBloc, CounterState>(
         listener: (context, state) {
           // TODO: implement listener
+
           if (state.counter == 3) {
             showDialog(
                 context: context,
@@ -65,24 +66,20 @@ class _MyHomePageState extends State<MyHomePage> {
             }));
           }
         },
-        //this part is for bloc listener
-        //if we don't use the bloc listener there will be n error
-
-        builder: (context, state) {
-          return Center(
-            child: Text(
-              '${BlocProvider.of<CounterCubit>(context, listen: true).state.counter}',
-              style: TextStyle(fontSize: 52.0),
-            ),
-          );
-        },
+        child: Center(
+          child: Text(
+            '${context.watch<CounterBloc>().state.counter}',
+            style: TextStyle(fontSize: 52.0),
+          ),
+        ),
       ),
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           FloatingActionButton(
             onPressed: () {
-              context.read<CounterCubit>().increment();
+              BlocProvider.of<CounterBloc>(context)
+                  .add(IncrementCounterEvent());
             },
             child: Icon(Icons.add),
             heroTag: 'increment',
@@ -92,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           FloatingActionButton(
             onPressed: () {
-              context.read<CounterCubit>().decrement();
+              context.read<CounterBloc>().add(DecrementCounterEvent());
             },
             child: Icon(Icons.remove),
             heroTag: 'decrement',
