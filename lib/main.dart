@@ -82,9 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
         children: [
           FloatingActionButton(
             onPressed: () {
-              BlocProvider.of<CounterCubit>(
-                context,
-              ).increment();
+              context.read<CounterCubit>().increment();
             },
             child: Icon(Icons.add),
             heroTag: 'increment',
@@ -94,7 +92,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           FloatingActionButton(
             onPressed: () {
-              BlocProvider.of<CounterCubit>(context).decrement();
+              context.read<CounterCubit>().decrement();
             },
             child: Icon(Icons.remove),
             heroTag: 'decrement',
