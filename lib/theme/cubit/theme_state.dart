@@ -1,13 +1,14 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-part of 'theme_bloc.dart';
+part of 'theme_cubit.dart';
 
 enum AppTheme {
   light,
   dark,
 }
 
-class ThemeState {
+class ThemeState extends Equatable {
   final AppTheme appTheme;
+
   ThemeState({
     this.appTheme = AppTheme.light,
   });
